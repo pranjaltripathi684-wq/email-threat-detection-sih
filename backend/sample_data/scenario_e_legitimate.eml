@@ -1,0 +1,34 @@
+Received: from mail-sor-f41.google.com (mail-sor-f41.google.com [209.85.220.41])
+	by mx.enterprise-gateway.com with ESMTPS id 1H8kRp4 (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+	for <developer@target-enterprise.com>; Wed, 27 Aug 2026 15:00:00 +0000
+Received: from internal-node (internal-node [10.20.1.5])
+	by mail-sor-f41.google.com with ESMTP id 88124; Wed, 27 Aug 2026 14:59:50 +0000
+From: "Alex Johnson" <alex.johnson@target-enterprise.com>
+To: <developer@target-enterprise.com>
+Reply-To: <alex.johnson@target-enterprise.com>
+Subject: Sprint Planning Agenda and Architecture Discussion
+Date: Wed, 27 Aug 2026 14:59:45 +0000
+Message-ID: <20260827145945.10293@target-enterprise.com>
+Authentication-Results: mx.enterprise-gateway.com;
+	spf=pass (mx.enterprise-gateway.com: domain of alex.johnson@target-enterprise.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=alex.johnson@target-enterprise.com;
+	dkim=pass header.d=target-enterprise.com header.s=202401;
+	dmarc=pass action=none header.from=target-enterprise.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=target-enterprise.com; s=202401;
+	bh=3bJ8kM12vP9q7zLwN4hRt6vS2yF4xZ8mB9kL2pD1eA0=; h=From:To:Subject:Date;
+MIME-Version: 1.0
+Content-Type: text/html; charset=utf-8
+
+<html>
+<body>
+<p>Hi Team,</p>
+<p>Please review our proposed agenda for tomorrow's engineering architecture sprint review:</p>
+<ul>
+    <li>Review API v1 endpoint security & rate limiting</li>
+    <li>Evaluate model inference latency metrics</li>
+    <li>Discuss database migration and indexing strategy</li>
+</ul>
+<p>You can access the design documentation on our internal portal:</p>
+<p><a href="https://wiki.target-enterprise.com/engineering/sprint-12">https://wiki.target-enterprise.com/engineering/sprint-12</a></p>
+<p>Best regards,<br>Alex Johnson<br>Staff Security Engineer</p>
+</body>
+</html>

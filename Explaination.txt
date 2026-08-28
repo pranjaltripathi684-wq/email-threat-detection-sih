@@ -1,0 +1,292 @@
+================================================================================
+AI-POWERED EMAIL THREAT DETECTION, GEOLOCATION & FORENSIC INTELLIGENCE PLATFORM
+Comprehensive Architectural & Operational Explanation Document
+================================================================================
+
+1. EXECUTIVE SUMMARY & OBJECTIVE
+--------------------------------------------------------------------------------
+Email is the single most critical communication channel across government agencies,
+banking institutions, healthcare networks, higher education, and enterprise 
+environments. However, email is also the primary attack vector for:
+  - Advanced Phishing & Credential Theft
+  - Display-Name & Executive Impersonation (CEO Fraud)
+  - Business Email Compromise (BEC) & Wire Fraud
+  - Malicious Payload & Ransomware Delivery
+  - Social Engineering & Human Exploitation
+
+This platform is an enterprise-grade academic prototype engineered to conduct 
+multi-layered, explainable, and cryptographically verified forensic analysis on 
+suspicious email messages. It bridges the gap between basic spam filtering and 
+in-depth digital forensics investigation.
+
+
+2. THE CORE PROBLEM THIS PROJECT SOLVES
+--------------------------------------------------------------------------------
+Traditional spam filters, static blacklists, and signature-based gateways fail 
+against modern email attacks due to the following structural blind spots:
+
+a) Lookalike Domains with Valid Authentication:
+   Attackers register typosquatted domains (e.g., "paypa1-update.com") and set up 
+   legitimate DNS records (SPF, DKIM, and DMARC). Basic filters see passing 
+   authentication and mistakenly mark the message as clean.
+
+b) Business Email Compromise (BEC) via Compromised Accounts:
+   When an adversary compromises a legitimate vendor's Microsoft 365 or Google 
+   Workspace account, the email is sent from a real, high-reputation domain with 
+   full cryptographic alignment. There are no malicious attachments or links—only 
+   social engineering requesting modified bank wire instructions.
+
+c) Display-Name Impersonation:
+   Attackers configure an email client to display the name of an executive (e.g., 
+   "Dr. Arthur Vance, CEO") while sending from a disposable public freemail 
+   provider (@gmail.com, @proton.me).
+
+d) Deceptive Links and Anchor Mismatches:
+   Emails contain hyperlinks where the visible anchor text displays a trusted URL 
+   (e.g., "https://www.paypal.com/login"), but the underlying HTML destination 
+   points to an untrusted IP address or shortened URL.
+
+e) Complex Multi-Hop Relay Obfuscation:
+   Adversaries route messages through multiple intermediate SMTP servers, VPNs, 
+   or open relays to conceal the actual origin.
+
+f) Lack of Forensic Chain-of-Custody & Explainability:
+   Most commercial security tools operate as "black boxes," giving a single score 
+   without explaining WHY an email is dangerous, without cryptographic evidence 
+   preservation, and without actionable SOC recommendations.
+
+
+3. SYSTEM ARCHITECTURE & HOW IT WORKS STEP-BY-STEP
+--------------------------------------------------------------------------------
+When an email enters the platform, it goes through an automated 5-stage pipeline:
+
+STAGE 1: EVIDENCE INGESTION & CRYPTOGRAPHIC PRESERVATION
+  1. The analyst uploads an RFC 5322 (.eml/.msg) file or pastes raw headers/body.
+  2. The ingestion engine immediately computes the SHA-256 cryptographic hash of 
+     the raw byte stream.
+  3. The raw file is stored in an immutable, read-only evidence directory named by 
+     its SHA-256 hash. The original data is never altered.
+  4. An "Initial Evidence Acquisition" event is automatically written to the 
+     immutable Chain of Custody ledger with a UTC timestamp and actor identity.
+
+STAGE 2: MULTI-LAYER FORENSIC ENGINES
+  The message is concurrently analyzed across five specialized forensic engines:
+
+  1. Header & Relay Path Engine (header_parser.py):
+     - Normalizes standard headers (From, To, Reply-To, Date, Message-ID).
+     - Extracts all intermediate "Received:" headers and orders them chronologically 
+       (Hop 1 = origin, Hop N = recipient gateway).
+     - Classifies each IP address (Public, Private, Loopback, Link-Local, Bogon).
+     - Calculates transit time deltas between hops to flag clock tampering.
+     - Identifies the "Earliest Reliable Public IP" (the first public relay IP 
+       recorded by a trustworthy receiving server).
+
+  2. Authentication & Alignment Matrix (auth_analyzer.py):
+     - Evaluates SPF (Sender Policy Framework) policies and IP authorization.
+     - Evaluates DKIM (DomainKeys Identified Mail) cryptographic body hashes and 
+       signatures.
+     - Evaluates DMARC (Domain-based Message Authentication, Reporting, and 
+       Conformance) alignment in both strict and relaxed modes.
+     - Detects "Authentic Lookalike Traps": Flags deceptive domains that pass SPF/
+       DKIM authentication to mislead analysts.
+     - Checks From vs. Reply-To domain alignment to detect redirection.
+
+  3. Sender & Domain Typosquatting Analyzer (sender_domain_analyzer.py):
+     - Calculates Levenshtein distance and Jaro-Winkler string similarity against 
+       protected high-value brands (PayPal, Microsoft, Google, Chase, etc.).
+     - Detects Unicode/Punycode (xn--) homoglyphs and character substitution 
+       (e.g., digit '1' for letter 'l', digit '0' for letter 'o', 'rn' for 'm').
+     - Detects freemail abuse (VIP display name using a public free webmail).
+
+  4. Content NLP & Social Engineering Heuristics (content_analyzer.py):
+     - Parses plain text and HTML, safely stripping scripts and tracking pixels.
+     - Scans for urgency cues ("immediate action required", "account suspended").
+     - Scans for fear & authority cues ("subpoena", "legal action", "termination").
+     - Scans for wire transfer & payment cues ("updated bank account", "routing").
+     - Scans for credential harvesting cues ("verify password", "login now").
+     - Scans for confidentiality pressure ("keep this private", "do not call").
+     - Detects embedded HTML <form>, <input>, and <iframe> elements.
+
+  5. URL & Static Attachment Forensics (url_analyzer.py & attachment_analyzer.py):
+     - URL Engine: Extracts all hyperlinks. Flags deceptive anchor text (visible 
+       text != actual href), IP-based destinations, shorteners, and high-entropy 
+       hexadecimal paths.
+     - Attachment Engine (Zero-Execution): Reads binary magic bytes (PE "MZ" 
+       executables, ELF, OLE2, ZIP), detects double extensions (e.g. 
+       "document.pdf.exe"), and inspects document macros (AutoOpen, VBA scripts) 
+       without ever executing the file on the host machine.
+
+STAGE 3: INFRASTRUCTURE & THREAT INTELLIGENCE ENRICHMENT
+  - Geolocation: Resolves the earliest public IP to its estimated country, city, 
+    latitude, longitude, Autonomous System Number (ASN), and ISP organization.
+  - Threat Feeds: Queries local and external intelligence feeds (AbuseIPDB, 
+    VirusTotal, URLhaus) for known malicious IP, domain, URL, or hash matches.
+
+STAGE 4: EXPLAINABLE 7-TIER RISK SCORING & MACHINE LEARNING
+  - The Risk Engine computes a composite score (0 to 100 points) weighted across 
+    7 distinct signal tiers:
+      1. Header Anomalies (0 - 20 pts)
+      2. Authentication & Alignment (0 - 20 pts)
+      3. Sender & Domain Impersonation (0 - 15 pts)
+      4. Content & Social Engineering (0 - 15 pts)
+      5. URL Threat Signals (0 - 15 pts)
+      6. Attachment Static Risk (0 - 10 pts)
+      7. Threat Intelligence & Reputation (0 - 5 pts)
+  - Risk Classification Tiers:
+      * 0 - 24 pts   : Low Risk / Benign
+      * 25 - 49 pts  : Suspicious
+      * 50 - 74 pts  : High Risk
+      * 75 - 100 pts : Critical Threat
+  - Explainability: Produces an itemized list of Positive Risk Indicators, 
+    Mitigating Factors, and a Prescribed Operational Action for the SOC team.
+  - Machine Learning: A calibrated TF-IDF + Logistic Regression model classifies 
+    the email category (Phishing, BEC, Impersonation, Financial Fraud, Malware 
+    Delivery, Legitimate) and outputs the top contributing n-gram tokens.
+
+STAGE 5: GRAPH CORRELATION, CASES & FORENSIC REPORTING
+  - NetworkX Correlation Engine: Builds a network graph connecting Emails, Senders, 
+    Domains, IPs, URLs, Hashes, and Cases. Discovers connected campaign clusters 
+    sharing infrastructure across different attacks.
+  - Incident Case Management: Allows analysts to create formal investigation 
+    cases, assign severity, attach evidence, and log timestamped analyst notes.
+  - Formal Forensic Report Generator: Creates printable HTML and PDF forensic 
+    intelligence reports including executive summaries, technical matrices, 
+    chain-of-custody ledgers, and legal disclaimers.
+
+
+4. DATABASE ARCHITECTURE (22+ RELATIONAL TABLES)
+--------------------------------------------------------------------------------
+The relational database (PostgreSQL / SQLite) is organized into 5 core domains:
+
+1. User & Access Control:
+   - users, roles, permissions, audit_logs (tracks every analyst action).
+
+2. Email & Forensic Parsing:
+   - emails (master record with SHA-256, classification, scores).
+   - email_headers (normalized RFC 5322 header key-value pairs).
+   - received_hops (ordered relay hops, IPs, time deltas, TLS status).
+   - authentication_results (SPF, DKIM, DMARC, ARC, lookalike trap flags).
+   - urls (extracted links, anchor text, deceptive flags, entropy).
+   - attachments (filenames, magic types, hashes, double-extension flags).
+
+3. Threat Intelligence & Infrastructure:
+   - indicators (IPs, domains, URLs, file hashes).
+   - ip_enrichment (geo coordinates, country, city, ASN, ISP).
+   - domain_enrichment (registration dates, DNS NS/MX records).
+   - threat_intelligence_matches (AbuseIPDB, VirusTotal, URLhaus feed hits).
+   - campaigns (discovered campaign clusters and actor profiles).
+
+4. Cryptographic Evidence & Chain of Custody:
+   - evidence_items (physical file path, immutable SHA-256 hash, legal hold).
+   - custody_events (non-repudiable log of access, verification, and transfers).
+
+5. Operations & Graph Topology:
+   - cases (incident tickets, priority, status workflow).
+   - analyst_notes (timestamped forensic observations).
+   - alerts (SOC real-time alert notifications).
+   - model_predictions (ML probabilities and feature token contributions).
+   - graph_entities & graph_relationships (persisted network graph topology).
+
+
+5. USER INTERFACE (15 DEDICATED ANALYST VIEWS)
+--------------------------------------------------------------------------------
+The frontend is built with React 18, TypeScript, Tailwind CSS, Lucide icons, 
+and Leaflet GIS mapping:
+
+ 1. Overview Dashboard: Real-time SOC metrics, alert cards, recent ingestions.
+ 2. Ingest & Upload Email: Drag-and-drop .eml upload, raw paste tab, scenario picker.
+ 3. Threat Assessment: Master risk score gauge (0-100), ML category, explainability.
+ 4. Headers & Relay Path: Interactive step-by-step visual hop timeline with time deltas.
+ 5. Auth & Alignment Matrix: Detailed SPF, DKIM, DMARC, and lookalike trap tables.
+ 6. URLs & Attachments: Extracted hyperlinks, deceptive anchors, and static file inspection.
+ 7. Geolocation & Infra Map: Leaflet world map with hop markers and ASN routing.
+ 8. Entity Correlation Graph: Visual network topology canvas with campaign clusters.
+ 9. Case Management: Incident tracker, status lifecycle, and investigation notes.
+10. Evidence & Custody Log: One-click SHA-256 cryptographic integrity verifier.
+11. Forensic Report Export: Live preview and printable HTML/PDF report export.
+12. Threat Intelligence: Manual query tool for any IP, domain, URL, or hash.
+13. User Directory & RBAC: Role-Based Access Control matrix for 4 distinct roles.
+14. Immutable Audit Trail: Chronological security log of all analyst activities.
+15. System Settings: Configurable scoring weights, threshold sliders, and disclaimers.
+* Privacy Mode: One-click toggle in the top bar to mask recipient PII (e.g. j***e@org.com).
+
+
+6. 5 SYNTHETIC DEMONSTRATION SCENARIOS
+--------------------------------------------------------------------------------
+The platform includes 5 pre-packaged synthetic demonstration emails designed to 
+prove detection across different modern attack vectors:
+
+- Scenario A: Lookalike-Domain Phishing
+  Spoofed as PayPal using typosquatted domain "paypa1-update.com" (homoglyph '1').
+  Deceptive link displays "paypal.com" but points to an untrusted IP address.
+  Result: Flagged for Lookalike Domain Trap, Deceptive Anchor, and Credential Harvest.
+
+- Scenario B: Executive Impersonation (CEO Fraud)
+  Display name matches CEO Dr. Arthur Vance, but sent from public @gmail.com.
+  Demands emergency purchase of $2,500 in Apple gift cards for a private meeting.
+  Result: Flagged for VIP display name on freemail + gift card/confidentiality cues.
+
+- Scenario C: Business Email Compromise (BEC on Valid Domain)
+  Sent from compromised legitimate partner domain "legit-partner.com".
+  SPF and DKIM fully pass. Body requests updating bank routing for a $48,500 invoice.
+  Result: Proves behavioral detection succeeds even when authentication passes.
+
+- Scenario D: Malicious Double-Extension Attachment
+  Fake court subpoena carrying attachment "Subpoena_Notice_Q3.pdf.exe".
+  Inspects binary header to detect Windows PE ("MZ") executable magic bytes.
+  Result: Flagged for Double Extension, Executable Payload, and Intimidation Language.
+
+- Scenario E: Legitimate Corporate Communication
+  Internal sprint review agenda from a legitimate enterprise domain.
+  Full SPF, DKIM, and DMARC alignment, matching Reply-To, TLS encrypted hops.
+  Result: Correctly classified as Benign / Clean (Score < 20/100).
+
+
+7. DEFENSIVE CYBERSECURITY & ATTRIBUTION DISCLAIMER
+--------------------------------------------------------------------------------
+A fundamental principle of defensive digital forensics is that technical signals 
+alone CANNOT definitively determine the physical human identity of an attacker.
+
+Because threat actors routinely route traffic through VPNs, Tor exit nodes, open 
+relays, compromised cloud servers, or hijacked accounts, this platform adheres 
+strictly to scientific, confidence-calibrated terminology:
+  - "Probable sending infrastructure" (NOT "attacker's computer")
+  - "Earliest reliable public IP" (NOT "hacker's home IP")
+  - "Estimated geolocation" (NOT "guaranteed physical location")
+  - "Confidence-based assessment" (NOT "absolute proof")
+  - "Attribution support, not definitive attribution"
+
+The platform is strictly for defensive cybersecurity, authorized investigation, 
+education, and incident response.
+
+
+8. HOW TO RUN THE PLATFORM
+--------------------------------------------------------------------------------
+OPTION 1: Local Execution (Fastest):
+  1. Start Backend:
+     cd backend
+     python -m uvicorn app.main:app --port 8000 --reload
+
+  2. Start Frontend:
+     cd frontend
+     npm.cmd run dev
+
+  3. Access Web UI:
+     Open browser at http://localhost:5173
+     Default Login Credentials:
+       - Analyst Role      : analyst      / AnalystPass123!
+       - Administrator Role: admin        / AdminPass123!
+       - Investigator Role : investigator / InvestigatorPass123!
+       - Auditor Role      : auditor      / AuditorPass123!
+
+  4. Run Test Scenarios:
+     Click "Load Test Scenarios (A-E)" in the top navigation bar to execute any 
+     scenario with a single click.
+
+OPTION 2: Docker Compose:
+  docker compose up --build
+  Access Web UI at http://localhost
+
+================================================================================
+END OF EXPLANATION DOCUMENT
+================================================================================

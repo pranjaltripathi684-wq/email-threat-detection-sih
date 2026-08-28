@@ -1,0 +1,32 @@
+Received: from mail.legit-partner.com (mail.legit-partner.com [45.33.32.156])
+	by mx.enterprise-gateway.com with ESMTPS id 3L8mPn1
+	for <accounts-payable@target-enterprise.com>; Wed, 27 Aug 2026 11:15:00 +0000
+From: "Carol Reynolds, Senior Billing Manager" <carol.reynolds@legit-partner.com>
+To: <accounts-payable@target-enterprise.com>
+Reply-To: <carol.reynolds@legit-partner.com>
+Subject: RE: Outstanding Invoice #INV-99214 - Updated Banking Remittance Details
+Date: Wed, 27 Aug 2026 11:14:20 +0000
+Message-ID: <20260827111420.77123@legit-partner.com>
+Authentication-Results: mx.enterprise-gateway.com;
+	spf=pass (mx.enterprise-gateway.com: domain of carol.reynolds@legit-partner.com designates 45.33.32.156 as permitted sender) smtp.mailfrom=carol.reynolds@legit-partner.com;
+	dkim=pass header.d=legit-partner.com header.s=main;
+	dmarc=pass action=none header.from=legit-partner.com
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+
+Good morning Accounts Payable Team,
+
+Regarding invoice #INV-99214 due this Friday ($48,500.00):
+
+Please be advised that due to our annual banking audit, our standard wire transfer and direct deposit accounts have changed. Kindly update your accounting records immediately with our new banking details:
+
+Bank: Horizon Trust Commercial Bank
+Account Name: Partner Solutions Escrow LLC
+Routing Number: 021000089
+Account Number: 9821447012
+
+Please remit the payment to these new banking instructions today and send the wire confirmation slip to this thread.
+
+Best regards,
+Carol Reynolds
+Senior Billing Manager | Legit Partner Co.

@@ -1,0 +1,32 @@
+Received: from relay01.nl-infra.net (relay01.nl-infra.net [198.51.100.42])
+	by mx.enterprise-gateway.com with ESMTPS id 7K9zQm9
+	for <operations@target-enterprise.com>; Wed, 27 Aug 2026 12:45:00 +0000
+From: "Court Process Notification" <summons@court-filing-notice.top>
+To: <operations@target-enterprise.com>
+Subject: Legal Subpoena Notice & Document Production Mandate
+Date: Wed, 27 Aug 2026 12:44:10 +0000
+Message-ID: <20260827124410.55142@court-filing-notice.top>
+Authentication-Results: mx.enterprise-gateway.com;
+	spf=fail (mx.enterprise-gateway.com: domain of summons@court-filing-notice.top does not designate 198.51.100.42 as permitted sender);
+	dkim=none;
+	dmarc=fail action=none header.from=court-filing-notice.top
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============778899001122=="
+
+--===============778899001122==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+
+You are hereby commanded to appear and produce electronic records referenced in the attached subpoena.
+Review the attached legal document immediately.
+
+--===============778899001122==
+Content-Type: application/octet-stream; name="Subpoena_Notice_Q3.pdf.exe"
+Content-Disposition: attachment; filename="Subpoena_Notice_Q3.pdf.exe"
+Content-Transfer-Encoding: base64
+
+TVqQAAMAAAAEAAAA//8AALgAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAyAAAAA4fug4AtAnNIbgBTM0hVGhpcyBwcm9ncmFtIGNhbm5vdCBiZSBydW4gaW4gRE9TIG1v
+ZGUuDQ0KJAAAAAAAAABQRQAATAEDAAAAAAAAAAAAAAAAAOAADwELAQIAAAAAAAAAAAAAAADwAAAA
+
+--===============778899001122==--

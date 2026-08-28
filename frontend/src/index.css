@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-[#080d1a] text-slate-100 selection:bg-cyan-500/30 selection:text-cyan-200;
+  }
+}
+
+/* Custom glassmorphism and forensic styling */
+.cyber-card {
+  @apply bg-[#0e1628]/80 backdrop-blur-md border border-slate-800/80 rounded-xl shadow-xl transition-all duration-200 hover:border-slate-700/80;
+}
+
+.cyber-card-glow {
+  @apply bg-[#0e1628]/90 backdrop-blur-md border border-cyan-500/30 rounded-xl shadow-[0_0_20px_rgba(6,182,212,0.15)];
+}
+
+.mono-font {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Custom sleek scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #080d1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* Leaflet dark theme fix */
+.leaflet-container {
+  background: #0b0f19 !important;
+  border-radius: 0.75rem;
+}
