@@ -43,7 +43,10 @@ class ThreatMLPipeline:
 
     def _train_baseline_model(self):
         """Initializes and trains an academic baseline TF-IDF + Logistic Regression model."""
-        os.makedirs(MODEL_DIR, exist_ok=True)
+        try:
+            os.makedirs(MODEL_DIR, exist_ok=True)
+        except OSError:
+            pass
         
         # Synthetic academic baseline samples
         corpus = [
@@ -106,10 +109,13 @@ class ThreatMLPipeline:
         self.model.fit(X, labels)
 
         # Save model
-        with open(MODEL_PATH, "wb") as f:
-            pickle.dump(self.model, f)
-        with open(VECTORIZER_PATH, "wb") as f:
-            pickle.dump(self.vectorizer, f)
+        try:
+            with open(MODEL_PATH, "wb") as f:
+                pickle.dump(self.model, f)
+            with open(VECTORIZER_PATH, "wb") as f:
+                pickle.dump(self.vectorizer, f)
+        except OSError:
+            pass  # read-only filesystem (e.g. serverless): keep the model in memory
 
     def predict(self, subject: str, body_text: str) -> Dict[str, Any]:
         """

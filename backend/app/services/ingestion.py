@@ -7,7 +7,8 @@ from sqlalchemy.orm import Session
 from app.db.models import Email, EvidenceItem, CustodyEvent, utcnow
 from app.core.config import settings
 
-EVIDENCE_STORAGE_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "storage", "evidence")
+EVIDENCE_STORAGE_DIR = os.environ.get("EVIDENCE_STORAGE_DIR") or os.path.join(
+    os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "storage", "evidence")
 os.makedirs(EVIDENCE_STORAGE_DIR, exist_ok=True)
 
 

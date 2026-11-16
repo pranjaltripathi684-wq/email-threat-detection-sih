@@ -1,6 +1,6 @@
 import re
 from datetime import datetime, timezone
-from typing import Dict, Any, Optional, List
+from typing import Dict, Any, Optional, List, Tuple
 from app.core.config import settings
 
 # Built-in High-Fidelity Forensic Mock Intelligence Database
