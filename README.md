@@ -6,6 +6,21 @@ An enterprise-grade academic prototype designed for deep email header forensics,
 
 Built by team TheInitiators26 for Smart India Hackathon (SIH).
 
+![SOC dashboard](docs/screenshots/dashboard.png)
+
+---
+
+## 📸 Screenshots
+
+The screenshots show Scenario A (a lookalike-domain PayPal phishing email) going through the pipeline.
+
+| | |
+|---|---|
+| **Threat assessment**: 7-tier explainable risk score with positive and mitigating evidence<br>![Threat assessment](docs/screenshots/threat-assessment.png) | **Relay path & header forensics**: hop-by-hop SMTP reconstruction and the earliest reliable public IP<br>![Relay path](docs/screenshots/relay-path.png) |
+| **Authentication & deception matrix**: SPF / DKIM / DMARC / ARC alignment and "authentic lookalike" detection<br>![Authentication](docs/screenshots/authentication.png) | **URLs & attachments**: deceptive link detection and static attachment forensics<br>![URLs and attachments](docs/screenshots/urls-attachments.png) |
+| **Entity correlation graph**: shared infrastructure grouped into campaign clusters<br>![Correlation graph](docs/screenshots/correlation-graph.png) | **Chain of custody**: SHA-256 evidence record and immutable custody log<br>![Chain of custody](docs/screenshots/chain-of-custody.png) |
+| **Forensic report**: printable intelligence report with PDF export<br>![Forensic report](docs/screenshots/forensic-report.png) | **Login**: role-based access with one-click demo accounts<br>![Login](docs/screenshots/login.png) |
+
 ---
 
 ## 🌟 Key Platform Capabilities
