@@ -2,6 +2,10 @@
 
 An enterprise-grade academic prototype designed for deep email header forensics, relay hop reconstruction, earliest reliable public IP extraction, authentication validation (SPF, DKIM, DMARC, ARC), homoglyph/typosquatting detection, NLP social engineering classification, static payload inspection, infrastructure geolocation, explainable 7-tier risk scoring, entity graph correlation, and cryptographic chain-of-custody logging.
 
+**▶ Live demo: [email-threat-detection-sih.vercel.app](https://email-threat-detection-sih.vercel.app)**. Click a demo role (e.g. *Analyst Role*), then **Authenticate & Enter SOC**. The five synthetic attack scenarios are already analysed, so every page has data. The demo database resets on its own.
+
+Built by team TheInitiators26 for Smart India Hackathon (SIH).
+
 ---
 
 ## 🌟 Key Platform Capabilities
